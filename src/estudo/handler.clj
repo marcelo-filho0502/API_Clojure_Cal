@@ -3,25 +3,35 @@
             [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.adapter.jetty :as jetty]
-            [estudo.core :as api]))
-
+            [estudo.core :as api]
+            [estudo.db :as db]))
 
 (defroutes app-routes
-           (GET "/" [] "Hello World")
+           (GET "/" [] "Calculadora de Calorias API Pronta!")
 
-           (GET "/calorias" [item]
-             (str(api/buscar-calorias item )))
+           (POST "/usuario" [altura peso idade sexo]
+             (str (db/registrar-usuario! {:altura altura :peso peso :idade idade :sexo sexo})))
 
-           (GET "/exercicio" [item]
-             (str(api/buscar-exercicio item )))
+           (GET "/usuario" []
+             (str (db/obter-usuario)))
 
-           (GET "/gasto" [alimento exercicio]
-             (str (api/calcular-saldo alimento exercicio)))
 
+           (POST "/comer" [item quantidade data]
+             (str (api/registrar-consumo! item quantidade data)))
+
+
+           (POST "/treinar" [item duracao data]
+             (str (api/registrar-treino! item duracao data)))
+
+
+           (GET "/extrato" [inicio fim]
+             (str (api/obter-extrato-periodo inicio fim)))
+
+
+           (GET "/saldo" [inicio fim]
+             (str (api/calcular-saldo-periodo inicio fim)))
 
            (route/not-found "Not Found"))
-
-
 
 (defn iniciar-servidor []
   (jetty/run-jetty (wrap-defaults app-routes api-defaults)
