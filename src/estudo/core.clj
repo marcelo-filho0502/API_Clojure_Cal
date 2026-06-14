@@ -21,7 +21,11 @@
          first)))
 
 (defn buscar-exercicio [item]
-  (let [resposta (http/get link-exercicio {:headers {"X-Api-Key" ninjas-key} :query-params {"activity" item}})
+  (let [resposta (http/get link-exercicio {:headers
+                                           {"X-Api-Key" ninjas-key}
+                                           :query-params
+                                           {"activity" item}})
+
         dados-json (json/parse-string (:body resposta) true)
         primeiro-exercicio (first dados-json)]
     (select-keys primeiro-exercicio [:name :calories_per_hour :duration_minutes])))

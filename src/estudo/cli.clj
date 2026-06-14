@@ -38,7 +38,7 @@
         (= opcao "B")
         (let [_ (println "\n--- REGISTRAR ALIMENTO ---")
               _ (print "Nome do alimento (em inglês, ex: apple): ") _ (flush) alim (read-line)
-              _ (print "Quantidade em gramas: ") _ (flush) qtd (read-line)
+              _ (print "Quantidade : ") _ (flush) qtd (read-line)
               _ (print "Data (AAAA-MM-DD): ") _ (flush) data-alim (read-line)
               resultado (api/registrar-consumo! alim qtd data-alim)]
           (println "\nAlimento registrado com sucesso! =>" resultado)
