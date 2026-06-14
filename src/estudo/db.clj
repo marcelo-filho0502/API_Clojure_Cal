@@ -1,6 +1,5 @@
 (ns estudo.db)
 
-;; O "banco de dados" em memória
 (def estado-aplicacao (atom {:usuario nil
                              :transacoes '()}))
 
@@ -15,6 +14,5 @@
   (swap! estado-aplicacao update :transacoes conj nova-transacao)
   nova-transacao)
 
-;; VEJA SE ESTA FUNÇÃO ESTÁ EXATAMENTE ASSIM NO SEU ARQUIVO:
 (defn obter-transacoes []
   (:transacoes @estado-aplicacao))

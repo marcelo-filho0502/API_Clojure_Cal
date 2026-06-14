@@ -9,7 +9,6 @@
 (def ninjas-key "YWTkVcQgkAHfakrcF4YuZ49xCcN1l10pfgZsruf8")
 (def link-exercicio "https://api.api-ninjas.com/v1/caloriesburned")
 
-
 (defn buscar-calorias [item]
   (let [resposta (http/get link-caloria {:query-params {"query" item "api_key" usda-key}})
         dados-json (json/parse-string (:body resposta) true)
@@ -21,15 +20,11 @@
          first)))
 
 (defn buscar-exercicio [item]
-  (let [resposta (http/get link-exercicio {:headers
-                                           {"X-Api-Key" ninjas-key}
-                                           :query-params
-                                           {"activity" item}})
-
+  (let [resposta (http/get link-exercicio {:headers {"X-Api-Key" ninjas-key}
+                                           :query-params {"activity" item}})
         dados-json (json/parse-string (:body resposta) true)
         primeiro-exercicio (first dados-json)]
     (select-keys primeiro-exercicio [:name :calories_per_hour :duration_minutes])))
-
 
 (defn registrar-consumo! [item quantidade data]
   (let [dados (buscar-calorias item)
@@ -53,13 +48,11 @@
                         :calorias calorias-perdidas}]
     (db/adicionar-transacao! nova-transacao)))
 
-;; Função auxiliar para filtrar transações por período (sem usar LOOPS imperativos) [cite: 44, 66]
 (defn- filtrar-por-periodo [transacoes data-inicio data-fim]
   (filter (fn [t]
             (and (>= (compare (:data t) data-inicio) 0)
                  (<= (compare (:data t) data-fim) 0)))
           transacoes))
-
 
 (defn obter-extrato-periodo [data-inicio data-fim]
   (let [todas (db/obter-transacoes)]
